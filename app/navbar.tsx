@@ -1,5 +1,6 @@
-// import { AiFillBug } from 'react-icons/ai';
-import Link from 'next/link';
+import { AiFillBug } from 'react-icons/ai';
+import Link from 'next/link'
+
 
 const Navbar = () => {
   const links = [
@@ -10,7 +11,7 @@ const Navbar = () => {
   return (
     <nav className="flex items-center justify-between bg-gray-800 text-white px-6 py-4 shadow-md">
       <Link href="/" className="flex items-center gap-2 text-xl font-bold hover:text-yellow-400">
-        {/* <AiFillBug className="text-2xl" /> */}
+        <AiFillBug className="text-2xl" />
         
         IssueTracker
       </Link>

@@ -9,7 +9,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const  body = await request.json();
   const issueSchema = z.object({
-    title: z.string().min(3).max(15),
+    title: z.string().min(5).max(30),
     description: z.string().min(3).max(200),
   });
     const validation = issueSchema.safeParse(body);
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         data: {
             title: body.title,
             description: body.description,
-            updateTime:body.updateTime
+            updateTime:body.updateTime,
         },
     })
     return NextResponse.json(newIssue,{status:201})

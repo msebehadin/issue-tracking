@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "public"."Issue" ALTER COLUMN "updateAt" SET DEFAULT CURRENT_TIMESTAMP;

@@ -1,6 +1,11 @@
+
 import { prisma } from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+export async function GET() {
+    const issues = prisma.issue.findMany();
+    return NextResponse.json(issues)
+}
 export async function POST(request: NextRequest) {
   const  body = await request.json();
   const issueSchema = z.object({
@@ -13,7 +18,8 @@ export async function POST(request: NextRequest) {
     const newIssue  = await prisma.issue.create({
         data: {
             title: body.title,
-            description:body.description
+            description: body.description,
+            updateTime:body.updateTime
         },
     })
     return NextResponse.json(newIssue,{status:201})

@@ -19,7 +19,7 @@ model Issue {
   title       String
   description String
   createdAt   DateTime @default(now())
-  updateAt    DateTime
+  updateAt    DateTime @default(now())
   status      status   @default(OPEN)
 }
 

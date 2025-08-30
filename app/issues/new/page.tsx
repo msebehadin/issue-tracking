@@ -6,6 +6,7 @@ import axios from "axios";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
+
 type FormData = {
   title: string;
   description: string;
@@ -19,13 +20,15 @@ export default function NewIssuePage() {
     formState: { errors, isSubmitting },
     reset,
   } = useForm<FormData>();
+
   const router = useRouter();
+
   const onSubmit = async (data: FormData) => {
     try {
       const response = await axios.post("/api/issue", data);
-      router.push("/issues");
       console.log("Issue submitted:", response.data);
       reset();
+      router.push("/issues");
     } catch (error) {
       console.error("Submission error:", error);
     }
@@ -34,29 +37,46 @@ export default function NewIssuePage() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-2xl mx-auto mt-10 space-y-6 p-6 bg-white shadow-md rounded-md"
+      className="max-w-2xl mx-auto mt-10 space-y-6 p-6 bg-white shadow-lg rounded-lg border border-gray-200"
     >
-      <h2 className="text-2xl font-semibold text-gray-800">Create New Issue</h2>
+      <h2 className="text-3xl font-bold text-gray-800">Create New Issue</h2>
 
-      {/* Title Input */}
+      {/* Title Field */}
       <div>
+        <label
+          htmlFor="title"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Title
+        </label>
         <input
+          id="title"
           {...register("title", { required: "Title is required" })}
-          placeholder="Issue title"
-          className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter issue title"
+          className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         {errors.title && (
           <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
         )}
       </div>
 
-      {/* Markdown Editor */}
+      {/* Description Field */}
       <div>
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Description
+        </label>
         <Controller
           name="description"
           control={control}
+          rules={{ required: "Description is required" }}
           render={({ field }) => (
-            <SimpleMDE {...field} placeholder="issue description" />
+            <SimpleMDE
+              {...field}
+              placeholder="Write a detailed description..."
+            />
           )}
         />
         {errors.description && (
@@ -66,12 +86,15 @@ export default function NewIssuePage() {
         )}
       </div>
 
-      {/* Submit Button */}
+      {/* Submit Button with Tailwind Spinner */}
       <button
         type="submit"
         disabled={isSubmitting}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
+        className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 disabled:opacity-50"
       >
+        {isSubmitting && (
+          <div className="h-5 w-5 border-2 border-t-2 border-white rounded-full animate-spin"></div>
+        )}
         {isSubmitting ? "Submitting..." : "Create Issue"}
       </button>
     </form>

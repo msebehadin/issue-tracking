@@ -23,7 +23,7 @@ export default function NewIssuePage() {
   const onSubmit = async (data: FormData) => {
     try {
       const response = await axios.post("/api/issue", data);
-router.push('/issues')
+      router.push("/issues");
       console.log("Issue submitted:", response.data);
       reset();
     } catch (error) {
@@ -55,13 +55,15 @@ router.push('/issues')
         <Controller
           name="description"
           control={control}
-          render={({field}) => (
-            <SimpleMDE
-             {...field}
-              placeholder="issue description"
-            />
+          render={({ field }) => (
+            <SimpleMDE {...field} placeholder="issue description" />
           )}
         />
+        {errors.description && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.description.message}
+          </p>
+        )}
       </div>
 
       {/* Submit Button */}

@@ -1,37 +1,35 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import axios from 'axios'
-import SimpleMDE from 'react-simplemde-editor'
-import 'easymde/dist/easymde.min.css'
-
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
+import axios from "axios";
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
+import { useRouter } from "next/navigation";
 type FormData = {
-  title: string
-  description: string
-}
+  title: string;
+  description: string;
+};
 
 export default function NewIssuePage() {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
+    control,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<FormData>()
-
-  const description = watch('description')
-
+  } = useForm<FormData>();
+  const router = useRouter();
   const onSubmit = async (data: FormData) => {
     try {
-      const response = await axios.post('/api/issues', data)
-      console.log('Issue submitted:', response.data)
-      reset()
+      const response = await axios.post("/api/issue", data);
+router.push('/issues')
+      console.log("Issue submitted:", response.data);
+      reset();
     } catch (error) {
-      console.error('Submission error:', error)
+      console.error("Submission error:", error);
     }
-  }
+  };
 
   return (
     <form
@@ -43,27 +41,26 @@ export default function NewIssuePage() {
       {/* Title Input */}
       <div>
         <input
-          {...register('title', { required: 'Title is required' })}
+          {...register("title", { required: "Title is required" })}
           placeholder="Issue title"
           className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
+        {errors.title && (
+          <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+        )}
       </div>
 
       {/* Markdown Editor */}
       <div>
-        <SimpleMDE
-          value={description}
-          onChange={(value) => setValue('description', value)}
-          options={{
-            spellChecker: false,
-            placeholder: 'Write your issue description in Markdown...',
-            autosave: {
-              enabled: true,
-              delay: 1000,
-              uniqueId: 'issue-editor',
-            },
-          }}
+        <Controller
+          name="description"
+          control={control}
+          render={({field}) => (
+            <SimpleMDE
+             {...field}
+              placeholder="issue description"
+            />
+          )}
         />
       </div>
 
@@ -73,8 +70,8 @@ export default function NewIssuePage() {
         disabled={isSubmitting}
         className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
       >
-        {isSubmitting ? 'Submitting...' : 'Create Issue'}
+        {isSubmitting ? "Submitting..." : "Create Issue"}
       </button>
     </form>
-  )
+  );
 }

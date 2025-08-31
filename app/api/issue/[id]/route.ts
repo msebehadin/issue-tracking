@@ -4,8 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+    { params }: { params: { id: string } }
+  
+)
+ {
   const body = await request.json();
   const validation = issueSchema.safeParse(body);
   if (!validation.success)
@@ -20,4 +22,5 @@ export async function PATCH(
             description:issue?.description
         }
     })
+    return NextResponse.json(updateIssue,{status:201})
 }

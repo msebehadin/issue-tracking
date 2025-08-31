@@ -29,8 +29,14 @@ export default function IssueForm({issue}:{issue?:FormData&{id?:number}}) {
 
   const onSubmit = async (data: FormData) => {
     try {
-      const response = await axios.post("/api/issue", data);
+      if (issue?.id) {
+        const response = await axios.post("/api/issue", data);
       console.log("Issue submitted:", response.data);
+        
+      }
+      else {
+        await axios.patch('/api/issue'+'issue.id')
+     }
       reset();
       router.push("/issues");
     } catch (error) {
@@ -102,7 +108,7 @@ export default function IssueForm({issue}:{issue?:FormData&{id?:number}}) {
         {isSubmitting && (
           <div className="h-5 w-5 border-2 border-t-2 border-white rounded-full animate-spin"></div>
         )}
-        {isSubmitting ? "Submitting..." : "Create Issue"}
+        {isSubmitting ?(issue?.id ? "updating...":"Submitting...") :issue?.id ? "update Issue":"create issue"}
       </button>
     </form>
   );

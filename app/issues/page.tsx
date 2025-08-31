@@ -1,5 +1,5 @@
 import { prisma } from "@/prisma/client";
-import IssueTable from "./issueTable";
+import IssueTable from "./_component/issueTable";
 
 
 const IssuePage = async () => {

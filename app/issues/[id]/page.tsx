@@ -31,7 +31,7 @@ const Page = async ({ params }: Props) => {
       </div>
       <div>
         <Link href={`/issues/${issue.id}/edit`}>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-small py-2 px-4 rounded-md transition duration-200 flex align-middle justify-center">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-small py-2 px-4 rounded-md transition duration-200 flex align-middle justify-center items-center">
             <BiEdit  />Edit Issue
           </button>
         </Link>

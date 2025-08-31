@@ -3,15 +3,23 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
-import SimpleMDE from "react-simplemde-editor";
+import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
-
+const SimpleMDE = dynamic(() =>
+  import("react-simplemde-editor"), {
+  ssr: false,
+});
 type FormData = {
   title: string;
   description: string;
 };
-export default function IssueForm({issue}:{issue?:FormData&{id?:number}}) {
+
+export default function IssueForm({
+  issue,
+}: {
+  issue?: FormData & { id?: number };
+}) {
   const {
     register,
     handleSubmit,
@@ -20,9 +28,9 @@ export default function IssueForm({issue}:{issue?:FormData&{id?:number}}) {
     reset,
   } = useForm<FormData>({
     defaultValues: {
-       title: issue?.title || "",
+      title: issue?.title || "",
       description: issue?.description || "",
-    }
+    },
   });
 
   const router = useRouter();
@@ -31,12 +39,10 @@ export default function IssueForm({issue}:{issue?:FormData&{id?:number}}) {
     try {
       if (issue?.id) {
         const response = await axios.post("/api/issue", data);
-      console.log("Issue submitted:", response.data);
-        
+        console.log("Issue submitted:", response.data);
+      } else {
+        await axios.patch("/api/issue" + "issue.id");
       }
-      else {
-        await axios.patch('/api/issue'+'issue.id')
-     }
       reset();
       router.push("/issues");
     } catch (error) {
@@ -49,9 +55,7 @@ export default function IssueForm({issue}:{issue?:FormData&{id?:number}}) {
       onSubmit={handleSubmit(onSubmit)}
       className="max-w-2xl mx-auto mt-10 space-y-6 p-6 bg-white shadow-lg rounded-lg border border-gray-200"
     >
-          <h2 className="text-3xl font-bold text-gray-800">
-              Issue Form
-          </h2>
+      <h2 className="text-3xl font-bold text-gray-800">Issue Form</h2>
 
       {/* Title Field */}
       <div>
@@ -65,8 +69,7 @@ export default function IssueForm({issue}:{issue?:FormData&{id?:number}}) {
           id="title"
           {...register("title", { required: "Title is required" })}
           placeholder="Enter issue title"
-                  className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  
+          className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         {errors.title && (
           <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
@@ -108,7 +111,7 @@ export default function IssueForm({issue}:{issue?:FormData&{id?:number}}) {
         {isSubmitting && (
           <div className="h-5 w-5 border-2 border-t-2 border-white rounded-full animate-spin"></div>
         )}
-        {isSubmitting ?(issue?.id ? "updating...":"Submitting...") :issue?.id ? "update Issue":"create issue"}
+        {isSubmitting ? "Submitting..." : "Create Issue"}
       </button>
     </form>
   );

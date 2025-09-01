@@ -32,7 +32,8 @@ const Page = async ({ params }: Props) => {
       <div>
         <Link href={`/issues/${issue.id}/edit`}>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-small py-2 px-4 rounded-md transition duration-200 flex align-middle justify-center items-center space my-1">
-            <BiEdit  />Edit Issue
+            <BiEdit />
+            Edit Issue
           </button>
           <button className="bg-red-500 hover:bg-red-700 text-white font-small py-2 px-4 rounded-md transition duration-200 flex align-middle justify-center items-center">
             Delete Issue

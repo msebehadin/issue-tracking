@@ -40,8 +40,8 @@ export default function IssueForm({
       if (issue?.id) {
         const response = await axios.post("/api/issue", data);
         console.log("Issue submitted:", response.data);
-      } else {
-        await axios.patch("/api/issue" + "issue.id");
+      }     else {
+        await  axios.delete("/api/issue" + "issue.id");
       }
       reset();
       router.push("/issues");

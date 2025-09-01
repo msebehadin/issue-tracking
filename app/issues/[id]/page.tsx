@@ -1,6 +1,7 @@
 import { prisma } from "@/prisma/client";
 import Link from "next/link";
 import { BiEdit } from "react-icons/bi";
+import DeleteIssue from "./DeleteIssue";
 
 interface Props {
   params: { id: string };
@@ -35,10 +36,13 @@ const Page = async ({ params }: Props) => {
             <BiEdit />
             Edit Issue
           </button>
-          <button className="bg-red-500 hover:bg-red-700 text-white font-small py-2 px-4 rounded-md transition duration-200 flex align-middle justify-center items-center">
-            Delete Issue
-          </button>
+       
         </Link>
+           <DeleteIssue
+            params={{
+              id: "issue.id",
+            }}
+          />
       </div>
     </>
   );

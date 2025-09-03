@@ -38,11 +38,11 @@ const Page = async ({ params }: Props) => {
           </button>
        
         </Link>
-           <DeleteIssue
-            params={{
-              id: "issue.id",
-            }}
-          />
+          <DeleteIssue
+  params={{
+    id: issue.id.toString()// Use the actual variable and convert it to a string
+  }}
+/>
       </div>
     </>
   );

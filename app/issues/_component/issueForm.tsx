@@ -1,25 +1,26 @@
-"use client";
+'use client'
 
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
-import axios from "axios";
-import dynamic from "next/dynamic";
-import "easymde/dist/easymde.min.css";
-import { useRouter } from "next/navigation";
-const SimpleMDE = dynamic(() =>
-  import("react-simplemde-editor"), {
+import React from 'react'
+import { useForm, Controller } from 'react-hook-form'
+import axios from 'axios'
+import dynamic from 'next/dynamic'
+import 'easymde/dist/easymde.min.css'
+import { useRouter } from 'next/navigation'
+
+const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
   ssr: false,
-});
+})
+
 type FormData = {
-  title: string;
-  description: string;
-};
+  title: string
+  description: string
+}
 
 export default function IssueForm({
   issue,
 }: {
-  issue?: FormData & { id?: number };
-}) {
+  issue: FormData & { id: number }
+}): React.JSX.Element {
   const {
     register,
     handleSubmit,
@@ -28,27 +29,26 @@ export default function IssueForm({
     reset,
   } = useForm<FormData>({
     defaultValues: {
-      title: issue?.title || "",
-      description: issue?.description || "",
+      title: issue?.title ?? '',
+      description: issue?.description ?? '',
     },
-  });
+  })
 
-  const router = useRouter();
+  const router = useRouter()
 
   const onSubmit = async (data: FormData) => {
     try {
       if (issue?.id) {
-        const response = await axios.post("/api/issue", data);
-        console.log("Issue submitted:", response.data);
-      }     else {
-        await  axios.delete("/api/issue" + "issue.id");
+        await axios.patch(`/api/issues/${issue.id}`, data)
+      } else {
+        await axios.post('/api/issues', data)
       }
-      reset();
-      router.push("/issues");
+      reset()
+      router.push('/issues')
     } catch (error) {
-      console.error("Submission error:", error);
+      console.error('Submission error:', error)
     }
-  };
+  }
 
   return (
     <form
@@ -67,7 +67,7 @@ export default function IssueForm({
         </label>
         <input
           id="title"
-          {...register("title", { required: "Title is required" })}
+          {...register('title', { required: 'Title is required' })}
           placeholder="Enter issue title"
           className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -87,12 +87,9 @@ export default function IssueForm({
         <Controller
           name="description"
           control={control}
-          rules={{ required: "Description is required" }}
+          rules={{ required: 'Description is required' }}
           render={({ field }) => (
-            <SimpleMDE
-              {...field}
-              placeholder="Write a detailed description..."
-            />
+            <SimpleMDE {...field} placeholder="Write a detailed description..." />
           )}
         />
         {errors.description && (
@@ -102,7 +99,7 @@ export default function IssueForm({
         )}
       </div>
 
-      {/* Submit Button with Tailwind Spinner */}
+      {/* Submit Button */}
       <button
         type="submit"
         disabled={isSubmitting}
@@ -111,8 +108,8 @@ export default function IssueForm({
         {isSubmitting && (
           <div className="h-5 w-5 border-2 border-t-2 border-white rounded-full animate-spin"></div>
         )}
-        {isSubmitting ? "Submitting..." : "Create Issue"}
+        {issue?.id ? 'Update Issue' : 'Create Issue'}
       </button>
     </form>
-  );
+  )
 }

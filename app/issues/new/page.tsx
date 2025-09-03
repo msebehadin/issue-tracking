@@ -4,7 +4,7 @@ import IssueForm from '../_component/issueForm'
 const NewIssuePage = () => {
   return (
     <div>
-      <IssueForm/>
+      <IssueForm />
     </div>
   )
 }
